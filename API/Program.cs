@@ -12,6 +12,8 @@ builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddDbContext<TaskContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("TaskContext")));
 
+builder.Services.AddHttpLoggingInterceptor<RequestLogging>();
+
 var app = builder.Build();
 
 // Seed the database with initial data
