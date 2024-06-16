@@ -1,15 +1,10 @@
-public interface ILogService : IDisposable {
+public interface ILogService {
     void LogHighPriority(LogEvent logEvent);
 }
 
 public class LogService : ILogService {
 
     public LogService() {}
-
-    public void Dispose()
-    {
-        throw new NotImplementedException();
-    }
 
     public void LogHighPriority(LogEvent logEvent)
     {

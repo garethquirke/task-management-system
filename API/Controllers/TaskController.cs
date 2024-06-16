@@ -34,7 +34,7 @@ public class TaskController : ControllerBase
         return Ok(task);
     }
 
-    [HttpPut]
+    [HttpPost]
     public async Task<IActionResult> CreateTask(Task task)
     {
         if (!ModelState.IsValid)
@@ -82,6 +82,11 @@ public class TaskController : ControllerBase
 
         try
         {
+            if (updatedTask.Priority == Priority.High)
+            {
+                var logEvent = GetLogEvent(HttpCode.PUT, "/task", updatedTask);
+                _logService.LogHighPriority(logEvent);
+            }
             await _taskContext.SaveChangesAsync();
         }
         catch (Exception e)

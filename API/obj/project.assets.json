@@ -664,6 +664,19 @@
           "lib/netstandard2.0/Mono.TextTemplating.dll": {}
         }
       },
+      "NReco/2.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/net40/NReco.dll": {
+            "related": ".XML"
+          }
+        },
+        "runtime": {
+          "lib/net40/NReco.dll": {
+            "related": ".XML"
+          }
+        }
+      },
       "SQLitePCLRaw.bundle_e_sqlite3/2.1.6": {
         "type": "package",
         "dependencies": {
@@ -2397,6 +2410,19 @@
         "mono.texttemplating.nuspec"
       ]
     },
+    "NReco/2.0.3": {
+      "sha512": "JNuKMEh/8LlbaZgknKKvhpY3Ws2zT3s25aqA1MpuT5kogGn0GYDEpYjA5rh7YY82SjWdOSL4yD16N6ljvRehMA==",
+      "type": "package",
+      "path": "nreco/2.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/NReco.XML",
+        "lib/net40/NReco.dll",
+        "nreco.2.0.3.nupkg.sha512",
+        "nreco.nuspec"
+      ]
+    },
     "SQLitePCLRaw.bundle_e_sqlite3/2.1.6": {
       "sha512": "BmAf6XWt4TqtowmiWe4/5rRot6GerAeklmOPfviOvwLoF5WwgxcJHAxZtySuyW9r9w+HLILnm8VfJFLCUJYW8A==",
       "type": "package",
@@ -3018,6 +3044,7 @@
       "Microsoft.EntityFrameworkCore >= 8.0.6",
       "Microsoft.EntityFrameworkCore.Sqlite >= 8.0.6",
       "Microsoft.EntityFrameworkCore.Tools >= 8.0.6",
+      "NReco >= 2.0.3",
       "Swashbuckle.AspNetCore >= 6.4.0"
     ]
   },
@@ -3081,6 +3108,10 @@
             "target": "Package",
             "version": "[8.0.6, )"
           },
+          "NReco": {
+            "target": "Package",
+            "version": "[2.0.3, )"
+          },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
             "version": "[6.4.0, )"
@@ -3108,5 +3139,17 @@
         "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'NReco 2.0.3' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
+      "libraryId": "NReco",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

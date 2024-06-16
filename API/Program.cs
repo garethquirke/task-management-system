@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,19 @@ builder.Services.AddDbContext<TaskContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("TaskContext")));
 
 builder.Services.AddHttpLoggingInterceptor<RequestLogging>();
+builder.Services.AddHttpLogging(options =>
+{
+    options.LoggingFields = HttpLoggingFields.All;
+    options.CombineLogs = true;
+});
+builder.Services.AddHttpLoggingInterceptor<RequestLogging>();
+builder.Services.AddCors(options =>
+   {
+       options.AddPolicy("AllowSpecificOrigin",
+           builder => builder.WithOrigins("http://localhost:5173")
+                             .AllowAnyHeader()
+                             .AllowAnyMethod());
+   });
 
 var app = builder.Build();
 
@@ -52,11 +66,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("AllowSpecificOrigin");
 }
 
 app.UseRouting();
 app.MapControllers();
 app.UseHttpsRedirection();
+app.UseHttpLogging();
 
 /*
 TODO: Use auth on app and add data annotation [Authorize] on routes you want to protect

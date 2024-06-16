@@ -1,0 +1,23 @@
+#root {
+  margin: 0 auto;
+  padding: 0.5rem;
+}
+
+.task-table {
+  width: 80vw;
+}
+
+.table-container {
+  height: 400px;
+  overflow-y: scroll;
+  background-color: #242424;
+}
+
+table {
+  border-spacing: 4px;
+  margin-bottom: 0rem !important;
+}
+
+th {
+  text-align: start;
+}
