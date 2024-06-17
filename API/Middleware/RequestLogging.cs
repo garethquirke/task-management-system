@@ -21,19 +21,20 @@ internal sealed class RequestLogging : IHttpLoggingInterceptor
         return ValueTask.CompletedTask;
     }
 
+    // TODO: Move to a util class
     private void WriteMessageToLogFile(string message)
     {
         string logFilePath = @".\log.txt";
-        string directoryPath = Path.GetDirectoryName(logFilePath);
-
+        string directoryPath = Path.GetDirectoryName(logFilePath) ?? "<default directory>";
         if (!Directory.Exists(directoryPath))
         {
             Directory.CreateDirectory(directoryPath);
         }
 
-        using (StreamWriter writer = File.AppendText(@".\log.txt"))
+        using (StreamWriter writer = File.AppendText(logFilePath))
         {
             writer.WriteLine($"{DateTime.Now} - {message}");
+            writer.Flush();
         }
     }
 }

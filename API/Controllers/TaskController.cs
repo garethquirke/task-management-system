@@ -103,7 +103,8 @@ public class TaskController : ControllerBase
         {
             Code = code,
             EndPoint = endpoint,
-            Priority = task.Priority
+            Priority = task.Priority,
+            Task = task
         };
     }
 

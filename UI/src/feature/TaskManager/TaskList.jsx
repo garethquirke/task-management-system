@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { STATUS_KEY, PRIORITY_KEY, FORM_MODE } from "../../util/enumUtil";
+import { STATUS_KEY, PRIORITY_KEY, FORM_MODE, getKeyByValue } from "../../util/enumUtil";
 import TaskTable from "./TaskTable";
 import DistributionBar from "../../Shared/DistributionBar";
 import TaskModal from "./TaskModal";
 
 const TaskList = (props) => {
-  const { tasks, isLoading, handleDelete } = props;
+  const { fetchTasks, tasks, isLoading, handleDelete } = props;
 
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
@@ -14,6 +14,8 @@ const TaskList = (props) => {
   const [taskModalVisible, setTaskModalVisible] = useState(false);
   const [formMode, setFormMode] = useState(null);
   const [taskToUpdate, setTaskToUpdate] = useState(null);
+  const [actionPending, setActionPending] = useState(false);
+  const [errorMessage, setErrorMessge] = useState(null);
 
   const filteredData = useMemo(() => {
     return tasks.filter((item) => {
@@ -47,17 +49,61 @@ const TaskList = (props) => {
   };
 
   const handleModalOpen = (formMode) => {
+    setErrorMessge(null);
     setTaskModalVisible(true);
     setFormMode(formMode);
   };
 
-  const onUpdate = () => {
-    // send request to save and then fetch tasks again
+  const onUpdate = async (task) => {
+    const updateBody = {
+      ...task,
+      id: taskToUpdate.id,
+      dueDate: new Date(task.dueDate).toISOString(),
+      status: Number.isInteger(task.status) ? task.status : Number(getKeyByValue(STATUS_KEY, task.status)),
+      priority: Number.isInteger(task.priority) ? task.priority : Number(getKeyByValue(PRIORITY_KEY, task.priority))
+    };
+
+    try {
+      const response = await fetch(`http://localhost:5208/api/Task/tasks/${updateBody.id}`, {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateBody)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to update task: ${response.statusText}`);
+        }
+
+        setTaskModalVisible(false);
+        fetchTasks();
+      } catch (err) {
+          setErrorMessge(err);
+      }
   };
 
-  const onCreate = () => {
-    // send request to create and refresh tasks list
-  };
+  const onCreate = async (task) => {
+    try {
+        const body  = {...task, dueDate: new Date(task.dueDate).toISOString() };
+        const response = await fetch(`http://localhost:5208/api/Task`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(body)
+          });
+
+          if (!response.ok) {
+            throw new Error(`Failed to create task: ${response.statusText}`);
+          }
+
+          setTaskModalVisible(false);
+          fetchTasks();
+        } catch (err) {
+            setErrorMessge(err);
+        }
+  }
 
   const handleEdit = (taskId) => {
     const task = tasks.find(x => x.id === taskId);
@@ -66,7 +112,8 @@ const TaskList = (props) => {
   };
 
   const handleOnSave = (task) => {
-    // pass task in body to either update or save depending on form mode
+    const action = formMode === FORM_MODE.UPDATE ? onUpdate : onCreate;
+    action(task);
   };
 
   return (
@@ -77,6 +124,8 @@ const TaskList = (props) => {
         task={taskToUpdate}
         onSave={handleOnSave}
         onHide={() => setTaskModalVisible(false)}
+        actionPending={actionPending}
+        errorMessage={errorMessage}
       />
       <Row className="mb-2">
         <Col sm={2}>
@@ -84,7 +133,7 @@ const TaskList = (props) => {
             Create +
           </Button>
         </Col>
-        <Col sm={{ span: 4, offset: 2 }}>
+        <Col sm={{ span: 4 }}>
           <DistributionBar
             label="Status Breakdown"
             total={tasks.length}
@@ -94,7 +143,7 @@ const TaskList = (props) => {
             archived={taskBreakdown[STATUS_KEY[3]]}
           />{" "}
         </Col>
-        <Col sm={2}>
+        <Col sm={3}>
           <Form.Group controlId="statusFilter">
             <Form.Select
               className="bg-dark text-light"
@@ -110,7 +159,7 @@ const TaskList = (props) => {
             </Form.Select>
           </Form.Group>
         </Col>
-        <Col sm={2}>
+        <Col sm={3}>
           <Form.Group controlId="priorityFilter">
             <Form.Select
               className="bg-dark text-light"

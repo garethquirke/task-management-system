@@ -127,4 +127,3 @@
 /home/gareth/Development/Projects/task-management-system/API/obj/Debug/net8.0/API.pdb
 /home/gareth/Development/Projects/task-management-system/API/obj/Debug/net8.0/API.genruntimeconfig.cache
 /home/gareth/Development/Projects/task-management-system/API/obj/Debug/net8.0/ref/API.dll
-/home/gareth/Development/Projects/task-management-system/API/bin/Debug/net8.0/NReco.dll

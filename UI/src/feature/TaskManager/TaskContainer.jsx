@@ -35,11 +35,8 @@ const TaskContainer = (props) => {
   };
 
   const onDelete = () => {
-    fetch("http://localhost:5208/api/Task", {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+    fetch(`http://localhost:5208/api/Task/${deleteInfo.deleteId}`, {
+        method: 'DELETE'
       })
     .then(() => {
         fetchTasks();
@@ -51,8 +48,8 @@ const TaskContainer = (props) => {
   return (
     <Container fluid>
       <h2 className="text-align-center">Task Management</h2>
-      <ConfirmDelete taskName={deleteInfo.name} show={confirmDeleteVisible} onHide={() => setConfirmDeleteVisible(false)} onDelete={onDelete} />
-      <TaskList tasks={tasks} isLoading={loadState.isLoading} handleDelete={handleDelete} />
+      <ConfirmDelete taskName={deleteInfo.name} show={confirmDeleteVisible} onHide={() => setConfirmDeleteVisible(false)} onDelete={() => onDelete()} />
+      <TaskList fetchTasks={fetchTasks} tasks={tasks} isLoading={loadState.isLoading} handleDelete={handleDelete} />
     </Container>
   );
 };
