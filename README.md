@@ -14,7 +14,7 @@ Step 2.
 - URL to access Swagger for endpoint details is available once running: http://localhost:5208/swagger/index.html
 
 Step 3.
-- Open a new terimal window in the root of the project
+- Open a new terimal window in the root of the project and change directory to the interface: cd UI
 - If NPM is not installed please follow these steps: https://nodejs.org/en/download/package-manager
 - Ensure yarn is installed, can be achieve with this command: npm install -g yarn
 - Install dev dependencies such as Vite, Bootstrap with this command: yarn install
