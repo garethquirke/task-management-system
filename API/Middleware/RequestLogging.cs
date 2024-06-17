@@ -6,7 +6,6 @@ internal sealed class RequestLogging : IHttpLoggingInterceptor
 
     public ValueTask OnRequestAsync(HttpLoggingInterceptorContext logContext)
     {
-        Console.WriteLine("FUUK");
         var logInfo = $"Request: {logContext.HttpContext.Request.Method} {logContext.HttpContext.Request.Path}";
         WriteMessageToLogFile(logInfo);
 
